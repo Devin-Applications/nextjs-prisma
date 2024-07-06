@@ -1,17 +1,17 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useMemo, useState, useEffect } from "react";
-import { createVendor, deleteVendor, getVendors, updateVendor } from "./api/vendors";
 import styles from "../styles/Home.module.css";
 import { Vendor } from "../types";
+import axios from "axios";
 
 export const VendorList: React.FC = () => {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getVendors()
-      .then(data => setVendors(data))
+    axios.get("/api/vendors")
+      .then(response => setVendors(response.data))
       .catch(err => setError(err.message));
   }, []);
 
@@ -36,7 +36,11 @@ const VendorItem: React.FC<{ vendor: Vendor }> = ({ vendor }) => (
     <label className={styles.label}>
       {vendor.name}
     </label>
-    <button className={styles.deleteButton} onClick={() => deleteVendor(vendor.id)}>
+    <button className={styles.deleteButton} onClick={() => {
+      axios.delete("/api/vendors", { data: { id: vendor.id } })
+        .then(() => window.location.reload())
+        .catch(err => console.error(err));
+    }}>
       ✕
     </button>
   </li>
@@ -51,7 +55,9 @@ const AddVendorInput = () => {
     <form
       onSubmit={async e => {
         e.preventDefault();
-        createVendor({ name, contact, services });
+        axios.post("/api/vendors", { name, contact, services })
+          .then(() => window.location.reload())
+          .catch(err => console.error(err));
         setName("");
         setContact("");
         setServices("");
