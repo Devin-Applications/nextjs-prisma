@@ -1,6 +1,8 @@
 import { hash } from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -15,7 +17,6 @@ export default async function handler(req, res) {
   const hashedPassword = await hash(password, 10);
 
   try {
-    const prisma = new PrismaClient();
     const user = await prisma.user.create({
       data: {
         email,
@@ -23,11 +24,11 @@ export default async function handler(req, res) {
       },
     });
 
-    await prisma.$disconnect();
-
     return res.status(201).json({ message: 'User created', user });
   } catch (error) {
     console.error('Error during user registration:', error);
     return res.status(500).json({ message: 'Internal server error' });
+  } finally {
+    await prisma.$disconnect();
   }
 }
