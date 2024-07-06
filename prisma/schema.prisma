@@ -23,3 +23,11 @@ model User {
   password  String
   createdAt DateTime @default(now())
 }
+
+model Vendor {
+  id        String   @id @default(uuid())
+  name      String
+  contact   String
+  services  String
+  createdAt DateTime @default(now())
+}
