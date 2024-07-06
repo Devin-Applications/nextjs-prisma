@@ -37,3 +37,8 @@ can be created with `railway run yarn migrate:dev` and deployed with `railway ru
 `yarn generate`.
 
 [swr](https://swr.vercel.app/) is used to fetch data on the client and perform optimistic updates.
+
+## 🚀 Deployed Application
+
+The vendor management system is deployed and accessible at the following URL:
+[Vendor Management System](https://vendor-management-app-eaa6ieyo.staging.devinapps.com)
