@@ -97,7 +97,9 @@ const AddVendorInput: React.FC<{ setVendors: React.Dispatch<React.SetStateAction
     }
     setLoading(true);
     try {
+      console.log("Submitting vendor:", { name, contact, services });
       const response = await axios.post("/api/vendors", { name, contact, services });
+      console.log("Vendor added:", response.data);
       setVendors(prevVendors => [...prevVendors, response.data]);
       setName("");
       setContact("");
@@ -105,7 +107,7 @@ const AddVendorInput: React.FC<{ setVendors: React.Dispatch<React.SetStateAction
       setError(null);
     } catch (err) {
       setError("Failed to add vendor. Please try again.");
-      console.error(err);
+      console.error("Error adding vendor:", err);
     } finally {
       setLoading(false);
     }
