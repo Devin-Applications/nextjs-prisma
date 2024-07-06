@@ -1,66 +1,66 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useMemo, useState } from "react";
-import { createTodo, deleteTodo, toggleTodo, useTodos } from "../api";
+import { createVendor, deleteVendor, toggleVendor, useVendors } from "../api";
 import styles from "../styles/Home.module.css";
-import { Todo } from "../types";
+import { Vendor } from "../types";
 
-export const TodoList: React.FC = () => {
-  const { data: todos, error } = useTodos();
+export const VendorList: React.FC = () => {
+  const { data: vendors, error } = useVendors();
 
-  if (error != null) return <div>Error loading todos...</div>;
-  if (todos == null) return <div>Loading...</div>;
+  if (error != null) return <div>Error loading vendors...</div>;
+  if (vendors == null) return <div>Loading...</div>;
 
-  if (todos.length === 0) {
-    return <div className={styles.emptyState}>Try adding a todo ☝️️</div>;
+  if (vendors.length === 0) {
+    return <div className={styles.emptyState}>Try adding a vendor ☝️️</div>;
   }
 
   return (
-    <ul className={styles.todoList}>
-      {todos.map(todo => (
-        <TodoItem todo={todo} />
+    <ul className={styles.vendorList}>
+      {vendors.map(vendor => (
+        <VendorItem vendor={vendor} />
       ))}
     </ul>
   );
 };
 
-const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => (
-  <li className={styles.todo}>
+const VendorItem: React.FC<{ vendor: Vendor }> = ({ vendor }) => (
+  <li className={styles.vendor}>
     <label
-      className={`${styles.label} ${todo.completed ? styles.checked : ""}`}
+      className={`${styles.label} ${vendor.completed ? styles.checked : ""}`}
     >
       <input
         type="checkbox"
-        checked={todo.completed}
+        checked={vendor.completed}
         className={`${styles.checkbox}`}
-        onChange={() => toggleTodo(todo)}
+        onChange={() => toggleVendor(vendor)}
       />
-      {todo.text}
+      {vendor.name}
     </label>
 
-    <button className={styles.deleteButton} onClick={() => deleteTodo(todo.id)}>
+    <button className={styles.deleteButton} onClick={() => deleteVendor(vendor.id)}>
       ✕
     </button>
   </li>
 );
 
-const AddTodoInput = () => {
-  const [text, setText] = useState("");
+const AddVendorInput = () => {
+  const [name, setName] = useState("");
 
   return (
     <form
       onSubmit={async e => {
         e.preventDefault();
-        createTodo(text);
-        setText("");
+        createVendor(name);
+        setName("");
       }}
-      className={styles.addTodo}
+      className={styles.addVendor}
     >
       <input
         className={styles.input}
-        placeholder="Buy some milk"
-        value={text}
-        onChange={e => setText(e.target.value)}
+        placeholder="Vendor name"
+        value={name}
+        onChange={e => setName(e.target.value)}
       />
       <button className={styles.addButton}>Add</button>
     </form>
@@ -71,12 +71,12 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Railway NextJS Prisma</title>
+        <title>Vendor Management System</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <header className={styles.header}>
-        <h1 className={styles.title}>Todos</h1>
+        <h1 className={styles.title}>Vendors</h1>
         <h2 className={styles.desc}>
           NextJS app connected to Postgres using Prisma and hosted on{" "}
           <a href="https://railway.app">Railway</a>
@@ -84,9 +84,9 @@ const Home: NextPage = () => {
       </header>
 
       <main className={styles.main}>
-        <AddTodoInput />
+        <AddVendorInput />
 
-        <TodoList />
+        <VendorList />
       </main>
     </div>
   );
