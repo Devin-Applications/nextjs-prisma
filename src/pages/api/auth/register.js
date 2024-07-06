@@ -14,9 +14,9 @@ export default async function handler(req, res) {
 
   const hashedPassword = await hash(password, 10);
 
-  const prisma = new PrismaClient();
-
+  let prisma;
   try {
+    prisma = new PrismaClient();
     const user = await prisma.user.create({
       data: {
         email,
@@ -27,8 +27,10 @@ export default async function handler(req, res) {
     return res.status(201).json({ message: 'User created', user });
   } catch (error) {
     console.error('Error during user registration:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error', error: error.message });
   } finally {
-    await prisma.$disconnect();
+    if (prisma) {
+      await prisma.$disconnect();
+    }
   }
 }
