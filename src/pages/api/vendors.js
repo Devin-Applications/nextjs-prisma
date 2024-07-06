@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   }
 }
 
-async function createVendor(req, res) {
+export async function createVendor(req, res) {
   const { name, contact, services } = req.body;
 
   if (!name || !contact || !services) {
@@ -40,7 +40,7 @@ async function createVendor(req, res) {
   }
 }
 
-async function getVendors(req, res) {
+export async function getVendors(req, res) {
   try {
     const vendors = await prisma.vendor.findMany();
     return res.status(200).json(vendors);
@@ -50,7 +50,7 @@ async function getVendors(req, res) {
   }
 }
 
-async function deleteVendor(req, res) {
+export async function deleteVendor(req, res) {
   const { id } = req.body;
 
   if (!id) {
@@ -69,7 +69,7 @@ async function deleteVendor(req, res) {
   }
 }
 
-async function updateVendor(req, res) {
+export async function updateVendor(req, res) {
   const { id, name, contact, services } = req.body;
 
   if (!id || !name || !contact || !services) {
